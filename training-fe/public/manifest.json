@@ -1,0 +1,9 @@
+{
+  "short_name": "Acquire Studio Lite",
+  "name": "Acquire Studio Lite - a modern insurance form builder",
+
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

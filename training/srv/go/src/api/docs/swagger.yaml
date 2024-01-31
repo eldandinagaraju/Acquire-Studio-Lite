@@ -1,0 +1,402 @@
+definitions:
+  models.QuestionResponseSchema:
+    properties:
+      correctResponse:
+        items:
+          type: string
+        type: array
+      options:
+        items:
+          type: string
+        type: array
+      questionText:
+        type: string
+      questionType:
+        type: string
+      relatedTo:
+        type: integer
+      relationalOperation:
+        type: string
+      sectionId:
+        type: integer
+    type: object
+  models.SectionSchema:
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+    type: object
+  services.CreateFormResponseSchema:
+    properties:
+      id:
+        type: integer
+    type: object
+  services.CreateSectionResponseSchema:
+    properties:
+      id:
+        type: integer
+    type: object
+  services.CreateVersionResponseSchema:
+    properties:
+      id:
+        type: integer
+      versionCode:
+        type: string
+    type: object
+  services.FormSchema:
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      versions:
+        items:
+          $ref: '#/definitions/services.FormVersionSchema'
+        type: array
+    type: object
+  services.FormVersionSchema:
+    properties:
+      isPublished:
+        type: boolean
+      versionCode:
+        type: string
+      versionID:
+        type: integer
+    type: object
+  services.LoginResponseSchema:
+    properties:
+      expireTime:
+        type: string
+      jwtToken:
+        type: string
+    type: object
+  services.QuestionResponseSchema:
+    properties:
+      id:
+        type: integer
+    type: object
+  services.QuestionsListingResponse:
+    properties:
+      currentPage:
+        type: integer
+      pages:
+        type: integer
+      questions:
+        items:
+          $ref: '#/definitions/services.QuestionsListingSchema'
+        type: array
+    type: object
+  services.QuestionsListingSchema:
+    properties:
+      childQuestions:
+        items:
+          $ref: '#/definitions/services.QuestionsListingSchema'
+        type: array
+      correctResponse:
+        items:
+          type: string
+        type: array
+      id:
+        type: integer
+      options:
+        items:
+          type: string
+        type: array
+      questionText:
+        type: string
+      questionType:
+        type: string
+      relationalOperation:
+        type: string
+    type: object
+  services.SectionEditSchema:
+    properties:
+      title:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /:
+    delete:
+      consumes:
+      - application/json
+      description: deletes a version of a form from form_versions table by taking
+        version id as params
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: Version
+        "500":
+          description: Internal Server Error
+          schema:
+            type: Internal
+      security:
+      - BasicAuth: []
+      summary: deletes a version of a form
+    get:
+      consumes:
+      - application/json
+      description: fetches the question data for a given section id and page number
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: page
+        in: path
+        name: page
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.QuestionsListingResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: Invalid
+        "500":
+          description: Internal Server Error
+          schema:
+            type: Internal
+      security:
+      - BasicAuth: []
+      summary: fetches the questions data for a section
+    post:
+      consumes:
+      - application/json
+      description: creates a new section in a version by taking version id and section
+        title as params
+      parameters:
+      - description: versionId
+        in: body
+        name: versionId
+        required: true
+        schema:
+          type: integer
+      - description: title
+        in: body
+        name: title
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.CreateSectionResponseSchema'
+        "400":
+          description: Bad Request
+          schema:
+            type: Version
+        "500":
+          description: Internal Server Error
+          schema:
+            type: Internal
+      security:
+      - BasicAuth: []
+      summary: creates a new section in a form version
+    put:
+      consumes:
+      - application/json
+      description: publishes a form version by updating the is_published column in
+        form_versions table
+      parameters:
+      - description: versionID
+        in: body
+        name: versionID
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: Version
+        "500":
+          description: Internal Server Error
+          schema:
+            type: Internal
+      security:
+      - BasicAuth: []
+      summary: publishes a version of the form
+  /:id:
+    delete:
+      consumes:
+      - application/json
+      description: deletes a section from form version by taking section id as params
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: Section
+        "500":
+          description: Internal Server Error
+          schema:
+            type: Internal
+      security:
+      - BasicAuth: []
+      summary: deletes a section from form version
+    get:
+      consumes:
+      - application/json
+      description: fetches all sections from sections table for a given form version
+        id
+      parameters:
+      - description: id
+        in: body
+        name: id
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SectionSchema'
+        "400":
+          description: Bad Request
+          schema:
+            type: Version
+        "500":
+          description: Internal Server Error
+          schema:
+            type: Internal
+      security:
+      - BasicAuth: []
+      summary: fetches all sections for a form version
+    patch:
+      consumes:
+      - application/json
+      description: changes the title of a given section id in form version by taking
+        section id as params
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: title
+        in: body
+        name: title
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.SectionEditSchema'
+        "400":
+          description: Bad Request
+          schema:
+            type: Section
+        "500":
+          description: Internal Server Error
+          schema:
+            type: Internal
+      security:
+      - BasicAuth: []
+      summary: changes the title of a section
+    put:
+      consumes:
+      - application/json
+      description: changes the question data for a given question id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: questionText
+        in: body
+        name: questionText
+        required: true
+        schema:
+          type: string
+      - description: questionType
+        in: body
+        name: questionType
+        required: true
+        schema:
+          type: string
+      - description: sectionId
+        in: body
+        name: sectionId
+        required: true
+        schema:
+          type: integer
+      - description: options
+        in: body
+        name: options
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      - description: relationalOperation
+        in: body
+        name: relationalOperation
+        required: true
+        schema:
+          type: string
+      - description: correctResponse
+        in: body
+        name: correctResponse
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      - description: relatedTo
+        in: body
+        name: relatedTo
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.QuestionResponseSchema'
+        "400":
+          description: Bad Request
+          schema:
+            type: Question
+        "500":
+          description: Internal Server Error
+          schema:
+            type: Internal
+      security:
+      - BasicAuth: []
+      summary: changes the question data
+swagger: "2.0"

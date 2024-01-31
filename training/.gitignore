@@ -1,0 +1,66 @@
+# Compiled source #
+###################
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.sqlite
+*/logs/log-*
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea
+.vscode
+
+#  Configuration Files
+#########################
+*.pem
+assets/uploadedfiles
+CompileDaemon
+tmp/redis/appendonly.aof
+cgi-bin
+
+srv/*/bin
+srv/*/pkg
+srv/*/tmp
+srv/*/src/*/logs
+srv/*/src/*/vendor
+
+srv/auth/src/api/api
+
+*.tmp
+/tmp
+output
+swagger
+redis-data
+appendonly.aof
+
+# Generated files
+__debug_bin
+
+srv/go/src/api/api
+srv/go/src/api/coverage.out

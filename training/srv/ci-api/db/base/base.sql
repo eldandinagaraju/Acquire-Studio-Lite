@@ -1,0 +1,233 @@
+-- -- MySQL dump 10.13  Distrib 5.7.26, for Linux (x86_64)
+-- --
+-- -- Host: 10.150.191.22    Database: aaauat
+-- -- ------------------------------------------------------
+-- -- Server version	5.7.29-log
+
+-- /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+-- /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+-- /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+-- /*!40101 SET NAMES utf8 */;
+-- /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+-- /*!40103 SET TIME_ZONE='+00:00' */;
+-- /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+-- /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+-- /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+-- /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+-- --
+-- -- Table structure for table `activity_element_mapping`
+-- --
+
+-- DROP TABLE IF EXISTS `activity_element_mapping`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!40101 SET character_set_client = utf8 */;
+-- CREATE TABLE `activity_element_mapping` (
+--   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key of activity element mapping table',
+--   `activity_sub_type_id` int(11) NOT NULL COMMENT 'Primary key of activity sub type table',
+--   `name` varchar(255) NOT NULL COMMENT 'Name of the activity type',
+--   `display_name` varchar(255) DEFAULT NULL COMMENT 'Display name of the activity',
+--   `description` varchar(255) DEFAULT NULL COMMENT 'Description that tells about the activity type name',
+--   `created_time` datetime DEFAULT NULL COMMENT 'Created time of the record',
+--   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time of the record',
+--   `carrier_id` int(11) NOT NULL COMMENT 'Primary key of the carriers table',
+--   `row_status` int(11) NOT NULL DEFAULT '1' COMMENT 'Defines the active status of the record',
+--   PRIMARY KEY (`id`),
+--   KEY `activity_element_mapping_index` (`id`,`activity_sub_type_id`,`name`,`row_status`,`carrier_id`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --
+-- -- Table structure for table `activity_elements`
+-- --
+
+-- DROP TABLE IF EXISTS `activity_elements`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!40101 SET character_set_client = utf8 */;
+-- CREATE TABLE `activity_elements` (
+--   `id` int(11) NOT NULL AUTO_INCREMENT,
+--   `type` varchar(255) DEFAULT NULL COMMENT 'name of the activity',
+--   `description` text COMMENT 'description of the activity',
+--   `parent_id` varchar(255) DEFAULT NULL COMMENT 'primary key id of this table to maintain parent child relation ship',
+--   `direct_child_count` varchar(255) DEFAULT NULL COMMENT 'count of child which have same parent_id ie this row primary key id',
+--   `carrier_id` int(11) NOT NULL,
+--   `row_status` tinyint(4) DEFAULT '1' COMMENT '0- inactive record 1- active record',
+--   `created_time` datetime DEFAULT NULL,
+--   `modified_time` datetime DEFAULT NULL,
+--   PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --
+-- -- Table structure for table `activity_elements_data`
+-- --
+
+-- DROP TABLE IF EXISTS `activity_elements_data`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!40101 SET character_set_client = utf8 */;
+-- CREATE TABLE `activity_elements_data` (
+--   `id` int(11) NOT NULL AUTO_INCREMENT,
+--   `activity_types_id` int(11) DEFAULT NULL COMMENT 'activity_types primary key id where parent_id not null',
+--   `app_status` varchar(255) DEFAULT NULL COMMENT 'over all app status',
+--   `user_id` varchar(255) DEFAULT NULL COMMENT 'users table prmiary key id',
+--   `party_id` varchar(255) DEFAULT NULL COMMENT 'unique_id from users table',
+--   `activity_name` varchar(255) DEFAULT NULL COMMENT 'name of the acitivity',
+--   `activity_datatime` varchar(255) DEFAULT NULL COMMENT 'recorded datetime from frontend',
+--   `previous_value` varchar(255) DEFAULT NULL COMMENT 'optional values if value exists then they pass else noting',
+--   `current_value` varchar(255) DEFAULT NULL COMMENT 'value changed by user',
+--   `input_json` json DEFAULT NULL COMMENT 'data received from frontend',
+--   `user_ip_address` varchar(255) DEFAULT NULL,
+--   `user_time_zone` varchar(255) DEFAULT NULL,
+--   `current_date_time` varchar(255) DEFAULT NULL,
+--   `browser` varchar(255) DEFAULT NULL,
+--   `carrier_id` int(11) NOT NULL,
+--   `row_status` tinyint(4) DEFAULT '1' COMMENT '0- inactive record 1- active record',
+--   `created_time` datetime DEFAULT NULL,
+--   `modified_time` datetime DEFAULT NULL,
+--   PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --
+-- -- Table structure for table `activity_logging`
+-- --
+
+-- DROP TABLE IF EXISTS `activity_logging`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!40101 SET character_set_client = utf8 */;
+-- CREATE TABLE `activity_logging` (
+--   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key of questions table',
+--   `user_id` int(11) NOT NULL COMMENT 'users table primary key id',
+--   `activity_name` varchar(255) NOT NULL,
+--   `activity_datatime` varchar(255) DEFAULT NULL,
+--   `previous_value` varchar(255) DEFAULT NULL,
+--   `current_value` varchar(255) DEFAULT NULL,
+--   `json_data` json DEFAULT NULL COMMENT 'holds json data sent from front end',
+--   `carrier_id` int(11) DEFAULT '1',
+--   `row_status` int(11) NOT NULL DEFAULT '1' COMMENT 'Defines the active status of a record 1 - active, 0 - Inactive',
+--   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time of a record',
+--   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time of the record data',
+--   PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --
+-- -- Table structure for table `activity_sub_types`
+-- --
+
+-- DROP TABLE IF EXISTS `activity_sub_types`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!40101 SET character_set_client = utf8 */;
+-- CREATE TABLE `activity_sub_types` (
+--   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key of activity tables',
+--   `activity_type_id` int(11) NOT NULL COMMENT 'Primary key of activity sub type',
+--   `name` varchar(255) NOT NULL COMMENT 'Name of the activity type',
+--   `description` varchar(255) DEFAULT NULL COMMENT 'Description that tells about the activity type name',
+--   `created_time` datetime DEFAULT NULL COMMENT 'Created time of the record',
+--   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time of the record',
+--   `carrier_id` int(11) NOT NULL COMMENT 'Primary key of the carriers table',
+--   `row_status` int(11) NOT NULL DEFAULT '1' COMMENT 'Defines the active status of the record',
+--   PRIMARY KEY (`id`),
+--   KEY `activity_sub_type_index` (`id`,`activity_type_id`,`name`,`row_status`,`carrier_id`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --
+-- -- Table structure for table `activity_tracker`
+-- --
+
+-- DROP TABLE IF EXISTS `activity_tracker`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!40101 SET character_set_client = utf8 */;
+-- CREATE TABLE `activity_tracker` (
+--   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key table',
+--   `user_id` int(11) NOT NULL DEFAULT '0' COMMENT 'Primary key of users table',
+--   `event_access_token` varchar(255) DEFAULT NULL COMMENT 'access_token of user when event occured',
+--   `user_active_session_id` text COMMENT 'Active session id of user',
+--   `event_name` varchar(255) DEFAULT NULL COMMENT 'event name',
+--   `event_id` int(11) DEFAULT '0',
+--   `event_time` datetime DEFAULT NULL COMMENT 'event time with user_time zone',
+--   `json_data` text COMMENT 'Data that includes os version, app version and ip address',
+--   `agent_id` int(11) NOT NULL DEFAULT '0' COMMENT 'Primary key of agent in usres table',
+--   `row_status` tinyint(1) DEFAULT '1' COMMENT 'Record status 1-Active 0-Deactive',
+--   `user_session_id` int(11) DEFAULT '1' COMMENT 'Primary key of user_sessions table',
+--   `carrier_id` int(11) DEFAULT '1' COMMENT 'Primary key of carriers table',
+--   `created_time` datetime NOT NULL COMMENT 'Record created time',
+--   `modified_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Record updated time',
+--   PRIMARY KEY (`id`),
+--   KEY `index_activity_tracker` (`row_status`),
+--   KEY `idx_activity_tracker` (`user_id`,`created_time`,`row_status`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --
+-- -- Table structure for table `activity_types`
+-- --
+
+-- DROP TABLE IF EXISTS `activity_types`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!40101 SET character_set_client = utf8 */;
+-- CREATE TABLE `activity_types` (
+--   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key of activity tables',
+--   `name` varchar(255) NOT NULL COMMENT 'Name of the activity type',
+--   `description` varchar(255) DEFAULT NULL COMMENT 'Description that tells about the activity type name',
+--   `created_time` datetime DEFAULT NULL COMMENT 'Created time of the record',
+--   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time of the record',
+--   `carrier_id` int(11) NOT NULL COMMENT 'Primary key of the carriers table',
+--   `row_status` int(11) NOT NULL DEFAULT '1' COMMENT 'Defines the active status of the record',
+--   PRIMARY KEY (`id`),
+--   KEY `activity_type_index` (`id`,`name`,`row_status`,`carrier_id`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --
+-- -- Table structure for table `agencies`
+-- --
+
+-- DROP TABLE IF EXISTS `agencies`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!40101 SET character_set_client = utf8 */;
+-- CREATE TABLE `agencies` (
+--   `id` int(11) NOT NULL AUTO_INCREMENT,
+--   `name` varchar(255) NOT NULL,
+--   `street_address1` varchar(255) NOT NULL,
+--   `street_address2` varchar(255) DEFAULT NULL,
+--   `city` varchar(255) NOT NULL,
+--   `state_id` int(11) NOT NULL,
+--   `zipcode` varchar(50) NOT NULL,
+--   `phone_number` varchar(20) DEFAULT NULL,
+--   `website` varchar(255) DEFAULT NULL,
+--   `row_status` tinyint(1) DEFAULT '1',
+--   `created_time` datetime DEFAULT NULL,
+--   `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   `user_session_id` int(11) DEFAULT '0',
+--   `carrier_id` int(11) DEFAULT '0',
+--   PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --
+-- -- Table structure for table `agents`
+-- --
+
+-- DROP TABLE IF EXISTS `agents`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!40101 SET character_set_client = utf8 */;
+-- CREATE TABLE `agents` (
+--   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key for this table',
+--   `agent_id` varchar(255) DEFAULT NULL COMMENT 'producer_id in nw_applicant_default_data',
+--   `firm_id` varchar(255) DEFAULT NULL COMMENT 'producer_firm_id in nw_applicant_default_data',
+--   `firm_name` varchar(255) DEFAULT NULL COMMENT 'producer_firm_name in nw_applicant_default_data',
+--   `f_name` varchar(255) DEFAULT NULL COMMENT 'producer_f_name in nw_applicant_default_data',
+--   `l_name` varchar(255) DEFAULT NULL COMMENT 'producer_l_name in nw_applicant_default_data',
+--   `name` varchar(255) DEFAULT NULL COMMENT 'producer_name in nw_applicant_default_data',
+--   `row_status` tinyint(4) DEFAULT '1',
+--   `created_time` datetime DEFAULT CURRENT_TIMESTAMP,
+--   `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+--   PRIMARY KEY (`id`),
+--   KEY `agents_row_status` (`row_status`),
+--   KEY `agents_agent_id` (`agent_id`),
+--   KEY `agents_firm_id` (`firm_id`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
+

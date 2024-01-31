@@ -1,0 +1,38 @@
+# ===================================================================================
+#
+# * This file will be pulled when container starts and exports
+#   the following vars as environment variables
+# 
+# ====================================================================================
+CLIENT=sureify
+ENVIRONMENT=local
+DB_HOST=db
+DB_USER=root
+DB_PWD=root
+DB_DB=lifetime
+
+# Golang config
+GO111MODULE=on
+GOPROXY=direct
+GOSUMDB=off
+
+
+# ACQUIRE API ENV
+CLIENT=lifetime
+PHINX_MYSQL_DB=lifetime
+PHINX_MYSQL_USER=root
+PHINX_MYSQL_PWD=root
+PHINX_MYSQL_HOST=db
+XDEBUG_CONFIG="remote_host=host.sureify.internal remote_port=8888 remote_enable=1"
+
+
+#ACQUIRE_STUDIO
+JWT_SECRET_KEY="srinivas1234"
+JWT_EXPIRE_TIME="24h"
+
+DB_USER="root"
+DB_PASSWORD="root"
+DB_HOST="db"
+DB_NAME="lifetime"
+
+PAGE_SIZE=5

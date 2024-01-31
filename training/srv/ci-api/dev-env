@@ -1,0 +1,27 @@
+#!/bin/bash
+eval $(cat local_env | sed '/^#/ d' | sed '/^\s*$/d'| sed 's/^/export /')
+
+if [[ -z "$1" ]]; then
+	echo "Starting Application...\n"
+	docker-compose up
+else
+	if [[ "$1" = "test" ]]; then
+		if [[ "$2" = "carrier" ]]; then
+			docker-compose run app test
+		elif [[ "$2" = "api" ]]; then
+			docker-compose run api test
+		fi
+	elif [ "$1" = "build" ] || [ "$1" = "up" ] || [ "$1" = "ps" ]; then
+		docker-compose ${*}
+	elif [[ "$1" = "cron" ]]; then
+        docker-compose run --rm --name $3 app ${*:1}
+	elif [[ "$1" == "api" ]]; then
+		docker-compose run --rm api ${@:2}
+	elif [[ "$1" == "syncstream" ]]; then
+		docker-compose run --rm syncstream ${@:2}
+	elif [[ "$1" = "webpack" ]]; then
+        docker-compose run --rm webpack ${*:2}
+	else
+		docker-compose run --rm app ${*:1}
+	fi
+fi
